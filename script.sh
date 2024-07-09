@@ -103,7 +103,7 @@ if [ -z "$1" ]; then
 fi
 
 case $1 in
-    "k"*) # Key
+    k | key) # Key
         if [ -z "$2" ]; then
             print_help_k3
             exit 1
@@ -113,50 +113,51 @@ case $1 in
             if grep -q "$2" "$loaded_file"; then
                 container_dir="$containers_dir/$2"
                 case $3 in
-                    g*) # Generate
+                    g | generate) # Generate
                         ssh-keygen -f "$container_dir/$4"
-                        return 0
+                        exit 0
                         ;;
-                    a*) # Add
+                    a | add) # Add
                         process_path "$4"
                         check_key "$result_process_path"
                         if [ -n "$key_file" ]; then
                             cp "$key_file" "$container_dir"
                             ssh-keygen -f "$container_dir/$key_file" -y > "$container_dir/$key_file.pub"
-                            return 0
+                            exit 0
                         else
                             echo "The key is not a valid key"
-                            return 1
+                            exit 1
                         fi
                         ;;
-                    r*) # Remove
+                    r | remove) # Remove
                         process_path "$4"
                         check_key "$result_process_path"
                         if [ -n "$key_file" ]; then
                             rm "$key_file"
-                            return 0
+                            exit 0
                         else
                             echo "The key is not a valid key"
-                            return 1
+                            exit 1
                         fi
                         ;;
-                    c*) # Check
+                    c | check) # Check
                         process_path "$4"
                         check_key "$result_process_path"
                         if [ -n "$key_file" ]; then
                             echo "The key exists"
-                            return 0
+                            exit 0
                         else
                             echo "The key doesn't exist"
-                            return 1
+                            exit 1
                         fi
                         ;;
-                    l*) # List
+                    l | list) # List
                         find "$container_dir" -type f -name "*.pub" -exec basename {} \; | sed 's/\.pub$//'
-                        return 1
+                        exit 1
                         ;;
                     *)
                         print_help_k3
+                        exit 0
                 esac
             else
                 echo "The container $2 is not loaded"
@@ -167,28 +168,28 @@ case $1 in
             exit 1
         fi
         ;;
-    "c"*)
+    c | container)
         case "$3" in
-            a*) # Add
+            a | add) # Add
                 ;;
         esac
 
         if grep -q "$2" "$containers_file"; then
             case "$3" in
-                r*) # Remove
+                r | remove) # Remove
                     ;;
-                l*) # Load
+                l | load) # Load
                     ;;
             esac
             if grep -q "$2" "$loaded_file"; then
                 case "$3" in
-                    u*) # Unload
+                    u | unload) # Unload
                         ;;
                 esac
             fi
         fi
         ;;
-    "h"*)
+    h | host)
         ;;
 
     esac
