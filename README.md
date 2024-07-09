@@ -1,5 +1,9 @@
 # ssh-ssk
 
+> [!CAUTION]
+> This project is still in developement phase.\
+> I can't guarantee the correct behavior and functionality of this program in any way
+
 ## Description
 ssh-ssk is a project to keep safe all your ssh configs and keys by grouping them in encrypted container so you can unlock them with a single password and use all the keys in it without having to put a password on every key.
 
