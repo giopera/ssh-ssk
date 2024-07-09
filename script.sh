@@ -1,4 +1,31 @@
 #!/bin/bash
+# script.sh
+# ├── keys
+# │   ├── generate
+# │   ├── add
+# │   ├── remove
+# │   ├── check
+# │   └── list
+# │
+# ├── containers
+# │   ├── add
+# │   ├── remove
+# │   ├── load
+# │   └── unload
+# │
+# └── host
+#     ├── option
+#     │   ├── add   
+#     │   ├── remove
+#     │   ├── check  
+#     │   ├── list
+#     │   └── set
+#     ├── add
+#     ├── remove
+#     ├── check
+#     └── list
+#
+#
 
 print_help() {
     echo "Usage: "
@@ -139,10 +166,29 @@ case $1 in
             echo "There is no container called $2"
             exit 1
         fi
-    ;;
+        ;;
     "c"*)
-    ;;
-    "h"*)
-    ;;
+        case "$3" in
+            a*) # Add
+                ;;
+        esac
 
-esac
+        if grep -q "$2" "$containers_file"; then
+            case "$3" in
+                r*) # Remove
+                    ;;
+                l*) # Load
+                    ;;
+            esac
+            if grep -q "$2" "$loaded_file"; then
+                case "$3" in
+                    u*) # Unload
+                        ;;
+                esac
+            fi
+        fi
+        ;;
+    "h"*)
+        ;;
+
+    esac
