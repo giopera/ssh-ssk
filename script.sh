@@ -171,7 +171,11 @@ case $1 in
     c | container)
         case "$3" in
             a | add) # Add
-                echo "$2" >> "$containers_file"
+                if grep -q "$2" "$containers_file"; then
+                    echo "There is already a container called like this"
+                else
+                    echo "$2" >> "$containers_file"
+                fi
                 ;;
         esac
 
@@ -187,7 +191,7 @@ case $1 in
             if grep -q "$2" "$loaded_file"; then
                 case "$3" in
                     u | unload) # Unload
-                    sed -i "/$2/d" "$loaded_file"
+                        sed -i "/$2/d" "$loaded_file"
                         ;;
                 esac
             else
@@ -201,6 +205,29 @@ case $1 in
         fi
         ;;
     h | host)
-        ;;
+        case "$3" in
+            o | option)
+                case "$5" in
+                    a | add)
+                        ;;
+                    r | remove)
+                        ;;
+                    c | check)
+                        ;;
+                    l | list)
+                        ;;
+                    s | set)
+                        ;;
+                esac
+                ;;
+            a | add)
+                ;;
+            r | remove)
+                ;;
+            c | check)
+                ;;
+            l | list)
+                ;;
+        esac
 
     esac
