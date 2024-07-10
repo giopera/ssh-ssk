@@ -171,22 +171,33 @@ case $1 in
     c | container)
         case "$3" in
             a | add) # Add
+                echo "$2" >> "$containers_file"
                 ;;
         esac
 
         if grep -q "$2" "$containers_file"; then
             case "$3" in
                 r | remove) # Remove
+                    sed -i "/$2/d" "$containers_file"
                     ;;
                 l | load) # Load
+                    echo "$2" >> "$loaded_file"
                     ;;
             esac
             if grep -q "$2" "$loaded_file"; then
                 case "$3" in
                     u | unload) # Unload
+                    sed -i "/$2/d" "$loaded_file"
                         ;;
                 esac
+            else
+                echo "The container $2 is not loaded"
+                exit 1
+
             fi
+        else
+            echo "There is no container called $2"
+            exit 1
         fi
         ;;
     h | host)
